@@ -294,15 +294,19 @@ footer .soc svg { width: 18px; height: 18px; }
 .light .faq details { border-color: #e2ddd1; }
 .light .faq details p { color: var(--light-muted); }
 
-/* Hero map with route button */
-.hero-map { display: flex; flex-direction: column; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--graphite); box-shadow: 0 30px 60px rgba(0,0,0,.45); }
-.hero-map iframe { display: block; width: 100%; height: 400px; border: 0; }
-.map-card { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 16px 18px; border-top: 1px solid var(--line); }
-.map-card b { display: block; font-size: 16px; }
-.map-card small { display: block; color: var(--muted); font-size: 13px; margin: 2px 0 6px; }
-.map-card .status { font-size: 13px; }
-.map-card .btn { padding: 12px 18px; }
+/* Map band under the hero: wide map, route card on the right (Google puts its own info box top-left; the pin stays centred) */
+.map-band { position: relative; padding: 0; height: 520px; background: var(--graphite); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.map-band iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.map-band .wrap { position: relative; height: 100%; display: flex; align-items: center; justify-content: flex-end; pointer-events: none; }
+.map-card { pointer-events: auto; width: 320px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; background: rgba(13,13,14,.94); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: 0 24px 50px rgba(0,0,0,.4); }
+.map-card .eyebrow { margin-bottom: 6px; }
+.map-card b { font-size: 22px; font-weight: 800; }
+.map-card small { color: var(--muted); font-size: 14px; }
+.map-card .status { font-size: 14px; margin: 8px 0 16px; }
+.map-card .btn { width: 100%; }
 @media (max-width: 760px) {
-  .hero-map iframe { height: 300px; }
-  .map-card .btn { flex: 1; }
+  .map-band { height: auto; }
+  .map-band iframe { position: static; height: 340px; }
+  .map-band .wrap { display: block; height: auto; padding-top: 16px; padding-bottom: 16px; }
+  .map-card { width: 100%; box-shadow: none; }
 }
