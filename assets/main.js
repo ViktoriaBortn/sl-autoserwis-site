@@ -78,3 +78,83 @@ if ("IntersectionObserver" in window) {
 } else {
   document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
 }
+
+// Live Google rating and reviews (Places API (New)). Without an API key the
+// built-in fallback values stay on the page.
+const G = {
+  place: document.documentElement.dataset.gplace,
+  key: document.documentElement.dataset.gkey,
+  cacheKey: `sl-google-${LANG}`,
+  cacheMs: 30 * 60 * 1000,
+  locale: LANG === "ru" ? "ru-RU" : "pl-PL",
+  count: {
+    pl: { one: "opinia", few: "opinie", many: "opinii", suffix: "w Google" },
+    ru: { one: "отзыв", few: "отзыва", many: "отзывов", suffix: "в Google" }
+  }[LANG]
+};
+
+async function fetchGoogle() {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(G.cacheKey));
+    if (cached && Date.now() - cached.t < G.cacheMs) return cached.d;
+  } catch (e) {}
+  const res = await fetch(`https://places.googleapis.com/v1/places/${G.place}?languageCode=${LANG}`, {
+    headers: { "X-Goog-Api-Key": G.key, "X-Goog-FieldMask": "rating,userRatingCount,reviews" }
+  });
+  if (!res.ok) throw new Error(`Places API ${res.status}`);
+  const data = await res.json();
+  try { sessionStorage.setItem(G.cacheKey, JSON.stringify({ t: Date.now(), d: data })); } catch (e) {}
+  return data;
+}
+
+function applyRating({ rating, userRatingCount }) {
+  if (typeof rating !== "number") return;
+  const value = rating.toLocaleString(G.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  document.querySelectorAll("[data-g-rating]").forEach(el => { el.textContent = value; });
+  document.querySelectorAll(".rating .stars").forEach(el => el.style.setProperty("--r", `${Math.round((rating / 5) * 100)}%`));
+  if (typeof userRatingCount === "number") {
+    const form = G.count[new Intl.PluralRules(LANG).select(userRatingCount)] || G.count.many;
+    document.querySelectorAll("[data-g-count]").forEach(el => { el.textContent = `${userRatingCount} ${form} ${G.count.suffix}`; });
+  }
+}
+
+// Review text comes from Google, so it is only ever set via textContent
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text) node.textContent = text;
+  return node;
+}
+
+function renderReviews(reviews) {
+  const box = document.getElementById("gReviews");
+  if (!box || !Array.isArray(reviews) || !reviews.length) return;
+  box.replaceChildren(...reviews.slice(0, 3).map(r => {
+    const card = el("article", "review g-review");
+    const head = el("header");
+    const author = r.authorAttribution || {};
+    if (author.photoUri) {
+      const img = el("img");
+      Object.assign(img, { src: author.photoUri, alt: "", width: 40, height: 40, loading: "lazy", referrerPolicy: "no-referrer" });
+      head.append(img);
+    }
+    const who = el("div");
+    const name = el(author.uri ? "a" : "b", "g-author", author.displayName || "Google");
+    if (author.uri) Object.assign(name, { href: author.uri, target: "_blank", rel: "noopener" });
+    who.append(name, el("small", "", r.relativePublishTimeDescription || ""));
+    head.append(who);
+    const stars = el("div", "stars", "★★★★★");
+    stars.style.setProperty("--r", `${((r.rating || 0) / 5) * 100}%`);
+    const text = (r.text && r.text.text) || (r.originalText && r.originalText.text) || "";
+    card.append(head, stars, el("p", "", text));
+    return card;
+  }));
+  const src = document.querySelector(".g-source");
+  if (src) src.hidden = false;
+}
+
+if (G.place && G.key) {
+  fetchGoogle()
+    .then(data => { applyRating(data); renderReviews(data.reviews); })
+    .catch(() => { /* keep fallback values */ });
+}

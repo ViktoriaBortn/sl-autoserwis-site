@@ -208,6 +208,7 @@ footer .soc svg { width: 18px; height: 18px; }
   .lang { margin-left: auto; }
   .services, .why, .steps { grid-template-columns: repeat(2, 1fr); }
   .works, .team, .reviews { grid-template-columns: repeat(2, 1fr); }
+  .works > :last-child:nth-child(odd), .team > :last-child:nth-child(odd), .reviews > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media (max-width: 760px) {
   section { padding: 64px 0; }
@@ -310,3 +311,16 @@ footer .soc svg { width: 18px; height: 18px; }
   .map-band .wrap { display: block; height: auto; padding-top: 16px; padding-bottom: 16px; }
   .map-card { width: 100%; box-shadow: none; }
 }
+
+/* Stars filled to the rating (--r), used by the live Google rating */
+.rating .stars, .review .stars { --r: 100%; background: linear-gradient(90deg, var(--gold) var(--r), #6b6a66 var(--r)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.light .review .stars { background: linear-gradient(90deg, var(--gold) var(--r), #d8d2c4 var(--r)); -webkit-background-clip: text; background-clip: text; }
+.g-review { border-style: solid; color: var(--light-text); display: flex; flex-direction: column; gap: 10px; }
+.g-review header { display: flex; align-items: center; gap: 12px; }
+.g-review img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+.g-review .g-author { font-weight: 700; color: var(--light-text); }
+.g-review a.g-author:hover { color: #9a7322; }
+.g-review small { display: block; color: var(--light-muted); font-size: 13px; }
+.g-review .stars { margin: 0; }
+.g-review p { font-size: 14.5px; color: var(--light-muted); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.g-source { color: var(--light-muted); }
