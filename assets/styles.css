@@ -128,8 +128,8 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); line-height: 1.1; font-weight: 800; le
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: s; }
 .step { position: relative; padding: 28px 22px; background: #fff; border-radius: var(--radius); border: 1px solid #e6e2d8; }
 .step::before { counter-increment: s; content: "0" counter(s); font-size: 42px; font-weight: 800; color: var(--gold); line-height: 1; display: block; margin-bottom: 14px; }
-.step b { display: block; font-size: 18px; margin-bottom: 6px; }
-.step p { font-size: 14.5px; color: var(--light-muted); }
+.step b { display: block; font-size: 18px; margin-bottom: 6px; color: var(--light-text); }
+.step p { font-size: 15px; color: #3d3c39; }
 
 /* Works */
 .works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -317,6 +317,7 @@ footer .soc svg { width: 18px; height: 18px; }
 .light .review .stars { background: linear-gradient(90deg, var(--gold) var(--r), #d8d2c4 var(--r)); -webkit-background-clip: text; background-clip: text; }
 .g-review { border-style: solid; color: var(--light-text); display: flex; flex-direction: column; gap: 10px; }
 .g-review header { display: flex; align-items: center; gap: 12px; }
+.g-review .g-initial { width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--black); color: var(--gold); font-weight: 800; }
 .g-review img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
 .g-review .g-author { font-weight: 700; color: var(--light-text); }
 .g-review a.g-author:hover { color: #9a7322; }
