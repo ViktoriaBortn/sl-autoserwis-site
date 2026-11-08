@@ -136,6 +136,9 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); line-height: 1.1; font-weight: 800; le
 .work { border-radius: var(--radius); overflow: hidden; background: var(--graphite); border: 1px solid var(--line); }
 .work .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
 .work .ph { aspect-ratio: 1; border-radius: 0; border: 0; font-size: 12px; }
+.work .pair.single { grid-template-columns: 1fr; }
+.work .pair.single .ph { aspect-ratio: 2 / 1; }
+.work .ba { position: absolute; left: 10px; top: 10px; background: rgba(13,13,14,.78); color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; }
 .work .meta { padding: 16px 18px; }
 .work .meta b { display: block; }
 .work .meta small { color: var(--muted); }
